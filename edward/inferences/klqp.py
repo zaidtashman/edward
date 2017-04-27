@@ -109,14 +109,16 @@ class KLqp(VariationalInference):
         \\text{KL}( q(z; \lambda) \| p(z) ),
 
     where the KL term is computed analytically (Kingma and Welling,
-    2014). We compute this automatically when :math:`p(z)` and
-    :math:`q(z; \lambda)` are Normal.
+    2014). For example, this is true when :math:`p(z)` and :math:`q(z;
+    \lambda)` are Normal.
     """
     is_reparameterizable = all([
         rv.reparameterization_type ==
         tf.contrib.distributions.FULLY_REPARAMETERIZED
         for rv in six.itervalues(self.latent_vars)])
-    is_analytic_kl = all([isinstance(z, Normal) and isinstance(qz, Normal)
+    # TODO(dt): determine if there is a kl registered for kl(qz, z)
+    # for each pair in self.latent_vars. how?
+    is_analytic_kl = all([_is_registered_kl(qz, z)
                           for z, qz in six.iteritems(self.latent_vars)])
     if is_reparameterizable:
       if is_analytic_kl:
