@@ -24,7 +24,7 @@ class VariationalInference(Inference):
   sharing methods such as a default optimizer.
 
   To build an algorithm inheriting from `VariaitonalInference`, one
-  must at the minimum implement `build_loss_and_gradients`: it
+  must at the minimum implement `_build_loss_and_gradients`: it
   determines the loss function and gradients to apply for a given
   optimizer.
   """
@@ -72,7 +72,7 @@ class VariationalInference(Inference):
 
       var_list = list(var_list)
 
-    self._loss, grads_and_vars = self.build_loss_and_gradients(var_list)
+    self._loss, grads_and_vars = self._build_loss_and_gradients(var_list)
 
     if self._logging:
       summary_key = 'summaries_' + str(id(self))
@@ -181,7 +181,7 @@ class VariationalInference(Inference):
         self._progbar.update(t, {'Loss': info_dict['loss']})
 
   @abc.abstractmethod
-  def build_loss_and_gradients(self, var_list):
+  def _build_loss_and_gradients(self, var_list):
     """Build loss function and its gradients. They will be leveraged
     in an optimizer to update the model and variational parameters.
 

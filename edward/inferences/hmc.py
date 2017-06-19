@@ -63,7 +63,7 @@ class HMC(MonteCarlo):
     self.scope_iter = 0  # a convenient counter for log joint calculations
     return super(HMC, self).initialize(*args, **kwargs)
 
-  def build_update(self):
+  def _build_update(self):
     """Simulate Hamiltonian dynamics using a numerical integrator.
     Correct for the integrator's discretization error using an
     acceptance ratio.

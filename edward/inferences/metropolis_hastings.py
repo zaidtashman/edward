@@ -58,7 +58,7 @@ class MetropolisHastings(MonteCarlo):
     self.proposal_vars = proposal_vars
     super(MetropolisHastings, self).__init__(latent_vars, data)
 
-  def build_update(self):
+  def _build_update(self):
     """Draw sample from proposal conditional on last sample. Then
     accept or reject the sample based on the ratio,
 
