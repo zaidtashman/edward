@@ -80,13 +80,13 @@ class KLpq(VariationalInference):
         Number of samples from variational model for calculating
         stochastic gradients.
     """
-    self.n_samples = n_samples
+    self._n_samples = n_samples
     return super(KLpq, self).initialize(*args, **kwargs)
 
   def _build_loss_and_gradients(self, var_list):
-    p_log_prob = [0.0] * self.n_samples
-    q_log_prob = [0.0] * self.n_samples
-    for s in range(self.n_samples):
+    p_log_prob = [0.0] * self._n_samples
+    q_log_prob = [0.0] * self._n_samples
+    for s in range(self._n_samples):
       # Form dictionary in order to replace conditioning on prior or
       # observed variable with conditioning on a specific value.
       scope = 'inference_' + str(id(self)) + '/' + str(s)
@@ -118,7 +118,7 @@ class KLpq(VariationalInference):
     p_log_prob = tf.stack(p_log_prob)
     q_log_prob = tf.stack(q_log_prob)
 
-    if self.logging:
+    if self._logging:
       summary_key = 'summaries_' + str(id(self))
       tf.summary.scalar("loss/p_log_prob", tf.reduce_mean(p_log_prob),
                         collections=[summary_key])
