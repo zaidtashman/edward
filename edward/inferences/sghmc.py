@@ -18,6 +18,11 @@ except Exception as e:
 class SGHMC(MonteCarlo):
   """Stochastic gradient Hamiltonian Monte Carlo (Chen et al., 2014).
 
+  The algorithm simulates Hamiltonian dynamics with friction using a
+  discretized integrator. Its discretization error goes to zero as
+  the learning rate decreases. In particular, the algorithm implements
+  the update equations from (15) of Chen et al. (2014).
+
   #### Notes
 
   In conditional inference, we infer $z$ in $p(z, \\beta
@@ -62,11 +67,8 @@ class SGHMC(MonteCarlo):
     return super(SGHMC, self).initialize(*args, **kwargs)
 
   def _build_update(self):
-    """Simulate Hamiltonian dynamics with friction using a discretized
-    integrator. Its discretization error goes to zero as the learning
-    rate decreases.
-
-    Implements the update equations from (15) of Chen et al. (2014).
+    """Note the updates assume each Empirical random variable is
+    directly parameterized by `tf.Variable`s.
     """
     old_sample = {z: tf.gather(qz.params, tf.maximum(self.t - 1, 0))
                   for z, qz in six.iteritems(self.latent_vars)}
